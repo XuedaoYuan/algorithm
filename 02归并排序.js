@@ -17,7 +17,6 @@ function merge(arr, left, mid, right, temp) {
 	let i = left // 左序列指针
 	let j = mid + 1 // 右序列指针
 	let t = 0 //临时数组指针
-	debugger
 	while (i <= mid && j <= right) {
 		if (arr[i] <= arr[j]) {
 			temp[t] = arr[i]
