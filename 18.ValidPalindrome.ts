@@ -16,6 +16,7 @@ function isPalindrome(s: string): boolean {
 		if (toLowerCase(prev) === toLowerCase(suff)) {
       i++
       j--
+      continue
 		} else {
 			console.log(prev, suff, i)
 			console.log('suff', suff, j)

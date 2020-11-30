@@ -1,5 +1,6 @@
 /* 
  leetcode 344 字符串数组反转
+ input: ['h', 'e', 'l', 'l', 'o']
 */
 
 var reverseString = function (s) {
