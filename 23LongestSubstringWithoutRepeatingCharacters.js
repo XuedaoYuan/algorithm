@@ -8,7 +8,6 @@ var lengthOfLongestSubstring = function (s) {
 		r = -1
 	var maxLen = 0
 	while (l < s.length) {
-		debugger
 		if (r + 1 < s.length) {
 			var nextCharCode = s[r + 1].charCodeAt()
 			if (freq[nextCharCode] === 0) {

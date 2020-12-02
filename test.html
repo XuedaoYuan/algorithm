@@ -7,37 +7,151 @@
 	</head>
 	<body>
 		<script>
-			var lengthOfLongestSubstring = function (s) {
-				var freq = new Array(256).fill(0) // 保存字符出现的频率 用于判断是否重复
-				var l = 0,
-					r = -1
-				var maxLen = 0
-				while (l < s.length) {
-          debugger
-					if (r + 1 < s.length) {
-						var nextCharCode = s[r + 1].charCodeAt()
-						if (freq[nextCharCode] === 0) {
-							// 说明不存在
-							r++
-							freq[nextCharCode] += 1
-						} else {
-							var charCode = s[l].charCodeAt()
-							freq[charCode] -= 1
-							l++
+			var minWindow = function (s, t) {
+				/* if (t.length === 1) {
+					if (s.split('').indexOf(t) > -1) {
+						return t
+					} else {
+						return ''
+					}
+				} */
+				var sLength = s.length
+				var tLength = t.length
+				var freqT = new Array(128).fill(0) // 直接考虑所有的ascii码吧
+				for (let i = 0; i < tLength; i++) {
+					freqT[t[i].charCodeAt()]++
+				}
+				var left = 0
+				var right = 0
+				var result = ''
+				while (left < sLength) {
+					var leftCode = s[left].charCodeAt()
+					if (freqT[leftCode] > 0) {
+						break
+					} else {
+						left++
+					}
+				}
+				var freqS = new Array(128).fill(0)
+				while (left < sLength) {
+					if (right < sLength) {
+						var rightCharCode = s[right].charCodeAt()
+						freqS[rightCharCode]++
+						// 如果多加了， 需要走left
+						/* 	while (freqS[rightCharCode] > freqT[rightCharCode] && freqT[rightCharCode] > 0) {
+              var leftCode = s[left].charCodeAt()
+              freqS[leftCode]--
+							left++
+              // 如果下一个不在t里面， 继续走
+              leftCode = s[left].charCodeAt()
+							while (freqS[leftCode] > freqT[leftCode]) {
+								freqS[leftCode]--
+								left++
+								leftCode = s[left].charCodeAt()
+							}
+						} */
+
+						right++
+						if (isEqual(freqS, freqT)) {
+							var len = right - left
+							if (result) {
+								result = result.length < len ? result : s.substring(left, right)
+							} else {
+								result = s.substring(left, right)
+							}
+							// 需要走left
+							while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
+								freqS[s[left].charCodeAt()]--
+								left++
+							}
+							// 走到相等的地方再走一步跨过
+							// 走到相等的地方再走一步跨过
+
+							// 继续走 ， 直到走到下一个包含的字母， 过滤掉不存在的
+							freqS[s[left].charCodeAt()]--
+							left++
+							if (left < sLength) {
+								while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
+									freqS[s[left].charCodeAt()]--
+									left++
+								}
+							}
 						}
 					} else {
-						var charCode = s[l].charCodeAt()
-						freq[charCode] -= 1
-						l++
+						if (isEqual(freqS, freqT)) {
+							var len = right - left
+							if (result) {
+								result = result.length < len ? result : s.substring(left, right)
+							} else {
+								result = s.substring(left, right)
+							}
+							// 需要走left
+							while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
+								freqS[s[left].charCodeAt()]--
+								left++
+							}
+							// 走到相等的地方再走一步跨过
+							// 走到相等的地方再走一步跨过
+
+							// 继续走 ， 直到走到下一个包含的字母， 过滤掉不存在的
+
+							freqS[s[left].charCodeAt()]--
+							left++
+							if (left < sLength) {
+								while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
+									freqS[s[left].charCodeAt()]--
+									left++
+								}
+							}
+						} else {
+							left++
+						}
 					}
-					maxLen = Math.max(maxLen, r - l + 1)
 				}
-				return maxLen
+
+				// 最后修剪一下
+
+				var freqResultTemp = new Array(128).fill(0)
+				for (let i = 0; i < result.length; i++) {
+					var code = result[i].charCodeAt()
+					freqResultTemp[code]++
+				}
+
+				left = 0
+				var start = 0
+				while (left < result.length && result.length > t.length) {
+					var code = result[left].charCodeAt()
+					freqResultTemp[code]--
+					
+					if (isEqual(freqResultTemp, freqT)) {
+						start++
+					}
+					left++
+				}
+				if (start > 0) {
+					result = result.substring(start)
+        }
+				return result
 			}
 
-			console.log(lengthOfLongestSubstring('abcabcabc'))
-			console.log(lengthOfLongestSubstring('bbbbb'))
-			console.log(lengthOfLongestSubstring('qwkwwek'))
+			/* 判断t中存在的值和s中存在的值是否相等 */
+			function isEqual(arrS, arrT) {
+				let flag = true
+				for (let i = 0; i < arrT.length; i++) {
+					if (arrT[i] > 0 && arrS[i] < arrT[i]) {
+						flag = false
+						break
+					}
+				}
+				return flag
+			}
+
+			// console.time('ABC')
+			// console.log(minWindow('AADOBECODEBANC', 'ABC'))
+			// console.timeEnd('ABC')
+			console.time('a')
+			console.log(minWindow('bba', 'ab'))
+			console.timeEnd('a')
 		</script>
 	</body>
 </html>
