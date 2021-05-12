@@ -1,157 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-	</head>
-	<body>
-		<script>
-			var minWindow = function (s, t) {
-				/* if (t.length === 1) {
-					if (s.split('').indexOf(t) > -1) {
-						return t
-					} else {
-						return ''
-					}
-				} */
-				var sLength = s.length
-				var tLength = t.length
-				var freqT = new Array(128).fill(0) // 直接考虑所有的ascii码吧
-				for (let i = 0; i < tLength; i++) {
-					freqT[t[i].charCodeAt()]++
-				}
-				var left = 0
-				var right = 0
-				var result = ''
-				while (left < sLength) {
-					var leftCode = s[left].charCodeAt()
-					if (freqT[leftCode] > 0) {
-						break
-					} else {
-						left++
-					}
-				}
-				var freqS = new Array(128).fill(0)
-				while (left < sLength) {
-					if (right < sLength) {
-						var rightCharCode = s[right].charCodeAt()
-						freqS[rightCharCode]++
-						// 如果多加了， 需要走left
-						/* 	while (freqS[rightCharCode] > freqT[rightCharCode] && freqT[rightCharCode] > 0) {
-              var leftCode = s[left].charCodeAt()
-              freqS[leftCode]--
-							left++
-              // 如果下一个不在t里面， 继续走
-              leftCode = s[left].charCodeAt()
-							while (freqS[leftCode] > freqT[leftCode]) {
-								freqS[leftCode]--
-								left++
-								leftCode = s[left].charCodeAt()
-							}
-						} */
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * Definition for singly-linked list.
+       * function ListNode(val, next) {
+       *     this.val = (val===undefined ? 0 : val)
+       *     this.next = (next===undefined ? null : next)
+       * }
+       */
+      /**
+       * @param {ListNode} head
+       * @param {number} left
+       * @param {number} right
+       * @return {ListNode}
+       */
+      function ListNode(val, next) {
+        this.val = val === undefined ? 0 : val;
+        this.next = next === undefined ? null : next;
+      }
 
-						right++
-						if (isEqual(freqS, freqT)) {
-							var len = right - left
-							if (result) {
-								result = result.length < len ? result : s.substring(left, right)
-							} else {
-								result = s.substring(left, right)
-							}
-							// 需要走left
-							while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
-								freqS[s[left].charCodeAt()]--
-								left++
-							}
-							// 走到相等的地方再走一步跨过
-							// 走到相等的地方再走一步跨过
-
-							// 继续走 ， 直到走到下一个包含的字母， 过滤掉不存在的
-							freqS[s[left].charCodeAt()]--
-							left++
-							if (left < sLength) {
-								while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
-									freqS[s[left].charCodeAt()]--
-									left++
-								}
-							}
-						}
-					} else {
-						if (isEqual(freqS, freqT)) {
-							var len = right - left
-							if (result) {
-								result = result.length < len ? result : s.substring(left, right)
-							} else {
-								result = s.substring(left, right)
-							}
-							// 需要走left
-							while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
-								freqS[s[left].charCodeAt()]--
-								left++
-							}
-							// 走到相等的地方再走一步跨过
-							// 走到相等的地方再走一步跨过
-
-							// 继续走 ， 直到走到下一个包含的字母， 过滤掉不存在的
-
-							freqS[s[left].charCodeAt()]--
-							left++
-							if (left < sLength) {
-								while (freqS[s[left].charCodeAt()] > freqT[s[left].charCodeAt()]) {
-									freqS[s[left].charCodeAt()]--
-									left++
-								}
-							}
-						} else {
-							left++
-						}
-					}
-				}
-
-				// 最后修剪一下
-
-				var freqResultTemp = new Array(128).fill(0)
-				for (let i = 0; i < result.length; i++) {
-					var code = result[i].charCodeAt()
-					freqResultTemp[code]++
-				}
-
-				left = 0
-				var start = 0
-				while (left < result.length && result.length > t.length) {
-					var code = result[left].charCodeAt()
-					freqResultTemp[code]--
-					
-					if (isEqual(freqResultTemp, freqT)) {
-						start++
-					}
-					left++
-				}
-				if (start > 0) {
-					result = result.substring(start)
+      ListNode.prototype.showVal = function () {
+        const result = [];
+        let cur = this;
+        while (cur) {
+          result.push(cur.val);
+          cur = cur.next;
         }
-				return result
-			}
+        return result;
+      };
 
-			/* 判断t中存在的值和s中存在的值是否相等 */
-			function isEqual(arrS, arrT) {
-				let flag = true
-				for (let i = 0; i < arrT.length; i++) {
-					if (arrT[i] > 0 && arrS[i] < arrT[i]) {
-						flag = false
-						break
-					}
-				}
-				return flag
-			}
+      var reverseBetween = function (head, left, right) {
+        let pre = null;
+        let cur = head;
+        let index = 1;
+        let leftPreNode, leftNode;
+        while (cur) {
+          if (index === left) {
+            // 记录left之前的那个节点
+            leftPreNode = pre;
+            leftNode = cur;
+          }
+          if (left < index && index < right) {
+            // 反转
+            let next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+            index++;
+            continue;
+          }
+          if (index === right && right !== left) {
+            if (leftPreNode) {
+              leftPreNode.next = cur;
+            }else {
+              // 不存在leftPreNode意味着left为1， 也就是从头开始的，这时候head需要变更
+              head = cur
+            }
+            if (cur) {
+              leftNode.next = cur.next;
+              cur.next = pre;
+            }
+            break;
+          }
+          let next = cur.next;
+          pre = cur;
+          cur = next;
+          index++;
+        }
 
-			// console.time('ABC')
-			// console.log(minWindow('AADOBECODEBANC', 'ABC'))
-			// console.timeEnd('ABC')
-			console.time('a')
-			console.log(minWindow('bba', 'ab'))
-			console.timeEnd('a')
-		</script>
-	</body>
+        return head;
+      };
+
+      let head = new ListNode(3);
+      head.next = new ListNode(5);
+      // head.next.next = new ListNode(3);
+      // head.next.next.next = new ListNode(4);
+      // head.next.next.next.next = new ListNode(5);
+
+      console.log(head.showVal());
+      head = reverseBetween(head, 1, 2);
+
+      console.log(head.showVal());
+    </script>
+  </body>
 </html>
