@@ -7,86 +7,101 @@
   </head>
   <body>
     <script>
-      /**
-       * Definition for singly-linked list.
-       * function ListNode(val, next) {
-       *     this.val = (val===undefined ? 0 : val)
-       *     this.next = (next===undefined ? null : next)
-       * }
+      /*
+       * @Author: XueDao.Yuan
+       * @Date: 2021-05-12 16:58:26
+ * @Last Modified by: XueDao.Yuan
+ * @Last Modified time: 2021-05-12 17:36:56
        */
-      /**
-       * @param {ListNode} head
-       * @param {number} left
-       * @param {number} right
-       * @return {ListNode}
-       */
+      /* 
+leetcode 147
+*/
+
       function ListNode(val, next) {
         this.val = val === undefined ? 0 : val;
         this.next = next === undefined ? null : next;
       }
 
-      ListNode.prototype.showVal = function () {
-        const result = [];
-        let cur = this;
-        while (cur) {
-          result.push(cur.val);
-          cur = cur.next;
+      /* 创建一个链表 */
+      function createLinkedList(arr, n) {
+        if (n === 0) return null;
+        const head = new ListNode(arr[0]);
+        let curNode = head;
+        for (let i = 1; i < n; i++) {
+          curNode.next = new ListNode(arr[i]);
+          curNode = curNode.next;
         }
-        return result;
-      };
-
-      var reverseBetween = function (head, left, right) {
-        let pre = null;
-        let cur = head;
-        let index = 1;
-        let leftPreNode, leftNode;
-        while (cur) {
-          if (index === left) {
-            // 记录left之前的那个节点
-            leftPreNode = pre;
-            leftNode = cur;
-          }
-          if (left < index && index < right) {
-            // 反转
-            let next = cur.next;
-            cur.next = pre;
-            pre = cur;
-            cur = next;
-            index++;
-            continue;
-          }
-          if (index === right && right !== left) {
-            if (leftPreNode) {
-              leftPreNode.next = cur;
-            }else {
-              // 不存在leftPreNode意味着left为1， 也就是从头开始的，这时候head需要变更
-              head = cur
-            }
-            if (cur) {
-              leftNode.next = cur.next;
-              cur.next = pre;
-            }
-            break;
-          }
-          let next = cur.next;
-          pre = cur;
-          cur = next;
-          index++;
-        }
-
         return head;
+      }
+
+      function printLinkedList(head) {
+        const valueList = [];
+        let curNode = head;
+        while (curNode) {
+          valueList.push(curNode.val);
+          curNode = curNode.next;
+        }
+        valueList.push('null');
+        console.log(valueList.join('->'));
+        return valueList;
+      }
+      var insertionSortList = function (head) {
+        
+        if (!head) return null;
+        if (!head.next) return head;
+        let curNode = head;
+        let resultLink = new ListNode();
+        let resultLinkHead = resultLink;
+        resultLinkHead.val = head.val;
+        curNode = curNode.next;
+        while (curNode) {
+          insertInto(curNode);
+          curNode = curNode.next;
+        }
+
+        function insertInto(node) {
+          let curNode = resultLinkHead;
+          let preNode = null;
+          while (curNode) {
+            const val = curNode.val;
+            const next = curNode.next;
+            if (node.val <= val) {
+              //   插入到最前面
+              if (!preNode) {
+                const newNode = new ListNode(node.val);
+                newNode.next = curNode;
+                resultLinkHead = newNode;
+              } else {
+                // 插入中间
+                const newNode = new ListNode(node.val);
+                preNode.next = newNode;
+                newNode.next = curNode;
+              }
+
+              break;
+            }
+            if (node.val > val && !next) {
+              // 插入到最后面
+              const newNode = new ListNode(node.val);
+              curNode.next = newNode;
+              break;
+            }
+            if (val < node.val && node.val <= next.val) {
+              const newNode = new ListNode(node.val);
+              curNode.next = newNode;
+              newNode.next = next;
+              break;
+            }
+            preNode = curNode;
+            curNode = curNode.next;
+          }
+        }
+        return resultLinkHead;
       };
 
-      let head = new ListNode(3);
-      head.next = new ListNode(5);
-      // head.next.next = new ListNode(3);
-      // head.next.next.next = new ListNode(4);
-      // head.next.next.next.next = new ListNode(5);
-
-      console.log(head.showVal());
-      head = reverseBetween(head, 1, 2);
-
-      console.log(head.showVal());
+      const arr = [1, 3, 5, 4, 0];
+      const link = createLinkedList(arr, arr.length);
+      printLinkedList(insertionSortList(link));
     </script>
   </body>
 </html>
