@@ -6,6 +6,7 @@
  * }
  */
 /**
+ * leetcode 92
  * @param {ListNode} head
  * @param {number} left
  * @param {number} right
