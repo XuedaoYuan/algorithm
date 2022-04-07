@@ -2,15 +2,17 @@
  * @Author: XueDao.Yuan
  * @Date: 2021-05-10 16:18:29
  * @Last Modified by: XueDao.Yuan
- * @Last Modified time: 2021-05-11 10:41:01
+ * @Last Modified time: 2022-04-07 11:27:03
  */
+
+
 
 /**
  * leetcode 15
  * @param {number[]} nums
  * @return {number[][]}
  */
-var threeSum = function (nums) {
+ var threeSum = function (nums, target = -2) {
   nums.sort(function (a, b) {
     return a - b;
   });
@@ -19,13 +21,13 @@ var threeSum = function (nums) {
   for (let i = 0; i < len; i++) {
     let left = i + 1;
     let right = len - 1;
-    const target = nums[i];
+    const nums_i = nums[i];
 
     while (left < right && left !== i && right !== i) {
       //   console.log(left, right);
       let threeSum = nums[i] + nums[left] + nums[right];
-      if (threeSum === 0 && left < right) {
-        const temp = [target, nums[left], nums[right]];
+      if (threeSum === target && left < right) {
+        const temp = [nums_i, nums[left], nums[right]];
 
         result.push(temp);
         // left++;
@@ -37,10 +39,10 @@ var threeSum = function (nums) {
           right--;
         }
       }
-      if (threeSum < 0) {
+      if (threeSum < target) {
         left++;
       }
-      if (threeSum > 0) {
+      if (threeSum > target) {
         right--;
       }
     }

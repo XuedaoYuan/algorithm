@@ -7,56 +7,22 @@
   </head>
   <body>
     <script>
-      function canTransfer(word1, word2) {
-        if (word1 === word2) return true;
-        const word1Letters = word1.split('');
-        const word2Letters = word2.split('');
-        if (word1Letters.length !== word2Letters.length) {
-          return false;
-        }
-        let temp = 0;
-        const len = word1Letters.length;
-        for (let i = 0; i < len; i++) {
-          if (word1Letters[i] !== word2Letters[i]) {
-            temp++;
-            if (temp > 1) {
-              break;
-            }
+      var longestValidParentheses = function (s) {
+        debugger;
+        if (!s) return 0;
+        if (s.length === 1) return 0;
+        let max = 0;
+        for (let i = 0, len = s.length; i < len - 1; i++) {
+          const left = s[i];
+          const right = s[i + 1];
+          if (left === '(' && right === ')') {
+            max += 2;
           }
         }
-        return temp === 1;
-      }
-
-      var ladderLength = function (beginWord, endWord, wordList) {
-        const queue = [];
-        const visited = {};
-        queue.push({
-          word: beginWord,
-          step: 1
-        });
-        while (queue.length > 0) {
-          // console.log(queue.map((o) => o.word), queue.map((o) => o.step));
-          const item = queue.shift();
-          const word = item.word;
-          const step = item.step;
-          if (word === endWord) return step;
-          for (let i = 0, len = wordList.length; i < len; i++) {
-            const _word = wordList[i];
-            if (canTransfer(word, _word) && !visited[_word]) {
-              queue.push({
-                word: _word,
-                step: step + 1
-              });
-              visited[_word] = true;
-            }
-          }
-        }
-        return 0;
+        return max;
       };
 
-      // console.log(canTransfer('hit', 'hor'));
-
-      console.log(ladderLength('hit', 'hot', ['hot', 'dot', 'dog', 'lot', 'log', 'cog']));
+      console.log(longestValidParentheses('(()'));
     </script>
   </body>
 </html>
