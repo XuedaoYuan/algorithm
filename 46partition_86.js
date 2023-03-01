@@ -2,7 +2,7 @@
  * @Author: XueDao.Yuan
  * @Date: 2021-05-12 09:50:58
  * @Last Modified by: XueDao.Yuan
- * @Last Modified time: 2021-05-12 10:23:22
+ * @Last Modified time: 2023-02-28 18:59:36
  */
 /**
  * leetcode 86
@@ -77,6 +77,6 @@ var partition = function (head, x) {
   return head;
 };
 
-const link = createLinkedList([4, 3], 2);
+const link = createLinkedList([1,4,3,2,5,2], 6);
 const newLink = partition(link, 3);
 printLinkedList(newLink);

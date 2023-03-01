@@ -32,11 +32,16 @@ function printLinkedList(head) {
   console.log(valueList.join('->'));
   return valueList;
 }
-var mergeTwoLists = function (l1, l2) {
+
+function ListNode(val, next) {
+  this.val = val === undefined ? 0 : val;
+  this.next = next === undefined ? null : next;
+}
+var mergeTwoLists = function (list1, list2) {
   const resultLink = new ListNode();
   let trail = resultLink;
-  let curNode1 = l1;
-  let curNode2 = l2;
+  let curNode1 = list1;
+  let curNode2 = list2;
   while (curNode1 || curNode2) {
     if (trail.val !== undefined) {
       const newNode = new ListNode();
@@ -72,5 +77,8 @@ var mergeTwoLists = function (l1, l2) {
 const arr = [];
 const arr2 = [1, 2, 2, 3];
 
-const mergedLink = mergeTwoLists(createLinkedList(arr, arr.length), createLinkedList(arr2, arr2.length));
+const mergedLink = mergeTwoLists(
+  createLinkedList(arr, arr.length),
+  createLinkedList(arr2, arr2.length)
+);
 printLinkedList(mergedLink);

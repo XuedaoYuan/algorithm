@@ -2,7 +2,7 @@
  * @Author: XueDao.Yuan
  * @Date: 2021-05-12 16:58:26
  * @Last Modified by: XueDao.Yuan
- * @Last Modified time: 2021-05-12 17:38:32
+ * @Last Modified time: 2023-02-28 20:02:59
  */
 /* 
 leetcode 147
@@ -13,9 +13,9 @@ var insertionSortList = function (head) {
   if (!head) return null;
   if (!head.next) return head;
   let curNode = head;
-  let resultLink = new ListNode();
-  let resultLinkHead = resultLink;
-  resultLinkHead.val = head.val;
+  let firstNode = new ListNode();
+  let resultLinkHead = firstNode;
+  firstNode.val = head.val;
   curNode = curNode.next;
   while (curNode) {
     insertInto(curNode);
@@ -23,22 +23,22 @@ var insertionSortList = function (head) {
   }
 
   function insertInto(node) {
-    let curNode = resultLinkHead;
+    let pointer = resultLinkHead;
     let preNode = null;
-    while (curNode) {
-      const val = curNode.val;
-      const next = curNode.next;
+    while (pointer) {
+      const val = pointer.val;
+      const next = pointer.next;
       if (node.val <= val) {
         //   插入到最前面
         if (!preNode) {
           const newNode = new ListNode(node.val);
-          newNode.next = curNode;
+          newNode.next = pointer;
           resultLinkHead = newNode;
         } else {
           // 插入中间
           const newNode = new ListNode(node.val);
           preNode.next = newNode;
-          newNode.next = curNode;
+          newNode.next = pointer;
         }
 
         break;
@@ -46,22 +46,24 @@ var insertionSortList = function (head) {
       if (node.val > val && !next) {
         // 插入到最后面
         const newNode = new ListNode(node.val);
-        curNode.next = newNode;
+        pointer.next = newNode;
         break;
       }
-      if (val < node.val && node.val <= next.val) {
+      /* if (val < node.val && node.val <= next.val) {
+        console.log(1);
+        printLinkedList(resultLinkHead)
         const newNode = new ListNode(node.val);
-        curNode.next = newNode;
+        pointer.next = newNode;
         newNode.next = next;
         break;
-      }
-      preNode = curNode;
-      curNode = curNode.next;
+      } */
+      preNode = pointer;
+      pointer = pointer.next;
     }
   }
   return resultLinkHead;
 };
 
-const arr = [1, 3];
+const arr = [1, 3, 2, 5, 10, 0, 7];
 const link = createLinkedList(arr, arr.length);
 printLinkedList(insertionSortList(link));

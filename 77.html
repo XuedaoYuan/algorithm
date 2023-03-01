@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function LinkedNode(val, next, prev) {
+        this.val = val === undefined ? 0 : val;
+        this.next = next === undefined ? null : next;
+        this.prev = prev === undefined ? null : prev;
+      }
+
+      /* 创建一个链表 */
+      function createLinkedList(arr) {
+        if (arr.length === 0) return null;
+        const head = new LinkedNode(arr[0]);
+        let pointer = head;
+        for (let i = 1; i < arr.length; i++) {
+          const newNode = new LinkedNode(arr[i]);
+          pointer.next = newNode;
+          pointer = newNode;
+        }
+        return head;
+      }
+
+      function createLinkedList2(arr) {
+        if (arr.length === 0) return null;
+        const head = new LinkedNode(arr[0]);
+        let pointer = head;
+        pointer.prev = null;
+
+        for (let i = 1; i < arr.length; i++) {
+          const newNode = new LinkedNode(arr[i]);
+          newNode.prev = pointer;
+          pointer.next = newNode;
+          pointer = newNode;
+        }
+        return head;
+      }
+      let link = createLinkedList2([1, 2, 3]);
+      console.log(link);
+    </script>
+  </body>
+</html>
